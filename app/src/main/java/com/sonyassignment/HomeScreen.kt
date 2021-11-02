@@ -15,11 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.sonyassignment.repo.TranslationRepo
+import org.koin.core.Koin
 
 
 @ExperimentalFoundationApi
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    translationRepo: TranslationRepo = Koin().get()
+) {
     val sizeMapData = arrayOf("English", "Hindi", "Chinease")
     Scaffold(
         bottomBar = {
@@ -31,7 +35,10 @@ fun HomeScreen() {
                     modifier = Modifier.height(selectedHeight.value)
                 ) {
                     items(sizeMapData.size) { index ->
-                        Button(modifier = Modifier.wrapContentWidth(), onClick = {}) {
+                        Button(modifier = Modifier.wrapContentWidth(),
+                            onClick = {
+                                translationRepo.downloadFile()
+                            }) {
                             Text(text = sizeMapData[index])
                         }
                     }
