@@ -1,4 +1,4 @@
-package com.login.sonyassignment
+package com.sonyassignment
 
 import org.junit.Test
 
