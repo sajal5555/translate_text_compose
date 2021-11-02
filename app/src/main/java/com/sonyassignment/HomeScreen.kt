@@ -15,12 +15,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.opencsv.CSVReader
 import com.sonyassignment.repo.TranslationRepo
 import com.sonyassignment.webservice.FILE_NAME
 import org.koin.java.KoinJavaComponent.getKoin
 import java.io.File
-import java.io.FileReader
 
 
 @ExperimentalFoundationApi
@@ -35,6 +33,9 @@ fun HomeScreen(
     }
     val selectedCode = remember {
         mutableStateOf("")
+    }
+    val englishModel = remember {
+        mutableStateOf(LanguageModel())
     }
     Scaffold(
         bottomBar = {
@@ -72,6 +73,11 @@ fun HomeScreen(
                 dataList.value = prepTranslationArray(path)
             }
             translationRepo.response.value = null
+            dataList.value?.forEach {
+                if (it.languageCode == "en")
+                    englishModel.value = it
+            }
+
         }
         Box(
             modifier = Modifier
@@ -84,8 +90,11 @@ fun HomeScreen(
                     dataList.value?.filter { it.languageCode == selectedCode.value }?.get(0)
 
                 Column {
-                    selectedLanguage?.texts?.forEach {
-                        Text(text = it)
+                    selectedLanguage?.texts?.forEachIndexed { i, item ->
+                        if (item.isBlank()) {
+                            Text(text = englishModel.value.texts?.get(i) ?: "")
+                        } else
+                            Text(text = item)
                     }
                 }
             }
