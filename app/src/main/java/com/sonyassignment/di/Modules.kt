@@ -1,6 +1,7 @@
 package com.sonyassignment.di
 
 import android.content.Context
+import com.sonyassignment.repo.TranslationDataSource
 import com.sonyassignment.repo.TranslationRepo
 import com.sonyassignment.webservice.ApiService
 import org.koin.android.ext.koin.androidContext
@@ -17,6 +18,7 @@ fun getModules() =
 
 private val repositoryModule = module {
     single { TranslationRepo(get()) }
+    single { TranslationDataSource(get()) }
 }
 
 

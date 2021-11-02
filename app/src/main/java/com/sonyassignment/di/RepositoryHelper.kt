@@ -1,6 +1,7 @@
 package com.sonyassignment.di
 
 import com.google.gson.GsonBuilder
+import com.sonyassignment.webservice.BASE_URL
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -15,9 +16,15 @@ private const val WRITE_CONNECT_TIMEOUT: Long = 30000L
 class RepositoryHelper {
     fun repositoryBuilder(): Retrofit =
         Retrofit.Builder()
+            .baseUrl(BASE_URL)
             .client(okHttpClient())
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(GsonConverterFactory.create(GsonBuilder().create()))
+            .addConverterFactory(
+                GsonConverterFactory.create(
+                    GsonBuilder().setLenient()
+                        .create()
+                )
+            )
             .build()
 
     private fun okHttpClient() = OkHttpClient.Builder().addInterceptor { chain ->

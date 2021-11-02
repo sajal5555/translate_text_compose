@@ -1,9 +1,10 @@
 package com.sonyassignment.repo
 
-import com.sonyassignment.webservice.RepoResult
 import kotlinx.coroutines.flow.Flow
+import okhttp3.Response
+import okhttp3.ResponseBody
 
 
 interface ITranslationDataSource {
-    suspend fun downloadFile(url: String): Flow<RepoResult<*>?>
+    suspend fun downloadFile(): Flow<ResponseBody>
 }

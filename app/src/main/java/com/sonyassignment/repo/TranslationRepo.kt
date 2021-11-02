@@ -2,51 +2,43 @@ package com.sonyassignment.repo
 
 import android.os.Environment
 import android.util.Log
-import com.sonyassignment.webservice.RepoResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import okhttp3.ResponseBody
-import org.koin.core.Koin
+import org.koin.java.KoinJavaComponent.getKoin
+import java.io.File
 import java.io.FileOutputStream
 import java.io.InputStream
 
 class TranslationRepo(
-    private val translationDataSource: TranslationDataSource = Koin().get(),
+    private val translationDataSource: TranslationDataSource = getKoin().get(),
 ) {
+
     // file is stored at https://filebin.net/trpjj0svhw3u2cui
-    val fileUrl = "https://filebin.net/trpjj0svhw3u2cui/TranslationFile.csv"
-    val fileName = fileUrl.substring(fileUrl.lastIndexOf("/") + 1)
-    val pathWhereYouWantToSaveFile = Environment.getDataDirectory().absolutePath + fileName
+    val fileName = "TranslationFile.csv"
 
-     fun downloadFile() {
+    fun downloadFile() {
         CoroutineScope(Dispatchers.IO).launch {
-            translationDataSource.downloadFile(fileUrl).collect {
-                withContext(Dispatchers.Main) {
-                    when (it) {
-                        is RepoResult.Success -> {
-                            saveFile(it as ResponseBody, pathWhereYouWantToSaveFile)
-                        }
-                        is RepoResult.Error -> {
-
-                        }
-                    }
-                }
+            val data = translationDataSource.downloadFile()
+            data.collect {
+                saveFile(it, fileName)
             }
         }
     }
 
 
-    private fun saveFile(body: ResponseBody?, pathWhereYouWantToSaveFile: String): String {
+    private fun saveFile(body: ResponseBody?, fileName: String): String {
         if (body == null)
             return ""
         var input: InputStream? = null
         try {
             input = body.byteStream()
-            //val file = File(getCacheDir(), "cacheFileAppeal.srl")
-            val fos = FileOutputStream(pathWhereYouWantToSaveFile)
+            val yourFile = File(Environment.getDataDirectory(), fileName)
+            yourFile.createNewFile() // if file already exists will do nothing
+
+            val fos = FileOutputStream(yourFile, false)
             fos.use { output ->
                 val buffer = ByteArray(4 * 1024) // or other buffer size
                 var read: Int
@@ -55,7 +47,7 @@ class TranslationRepo(
                 }
                 output.flush()
             }
-            return pathWhereYouWantToSaveFile
+            return yourFile.path
         } catch (e: Exception) {
             Log.e("saveFile", e.toString())
         } finally {

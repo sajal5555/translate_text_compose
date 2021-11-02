@@ -10,19 +10,20 @@ import androidx.compose.material.Button
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.sonyassignment.repo.TranslationRepo
-import org.koin.core.Koin
+import org.koin.java.KoinJavaComponent.getKoin
 
 
 @ExperimentalFoundationApi
 @Composable
 fun HomeScreen(
-    translationRepo: TranslationRepo = Koin().get()
+    translationRepo: TranslationRepo = getKoin().get()
 ) {
     val sizeMapData = arrayOf("English", "Hindi", "Chinease")
     Scaffold(
@@ -37,7 +38,6 @@ fun HomeScreen(
                     items(sizeMapData.size) { index ->
                         Button(modifier = Modifier.wrapContentWidth(),
                             onClick = {
-                                translationRepo.downloadFile()
                             }) {
                             Text(text = sizeMapData[index])
                         }
@@ -47,6 +47,10 @@ fun HomeScreen(
         },
     ) {
         Box(contentAlignment = Alignment.Center) {
+            LaunchedEffect(true) {
+                translationRepo.downloadFile()
+
+            }
             Text(text = "Hello!")
         }
     }

@@ -1,21 +1,21 @@
 package com.sonyassignment.repo
 
+import android.util.Log
 import com.sonyassignment.webservice.ApiService
-import com.sonyassignment.webservice.RepoResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import org.koin.core.Koin
+import okhttp3.Response
+import okhttp3.ResponseBody
+import org.koin.java.KoinJavaComponent.getKoin
 
 class TranslationDataSource(
-    private val apiService: ApiService = Koin().get()
+    private val apiService: ApiService = getKoin().get()
 ) : ITranslationDataSource {
 
-    override suspend fun downloadFile(url: String): Flow<RepoResult<*>?> {
+    override suspend fun downloadFile(): Flow<ResponseBody> {
         return flow {
-            val responseBody =
-                apiService.downloadFile(url)
-                    .body()
-            emit(responseBody)
+            val response = apiService.downloadFile()
+            emit(response)
         }
     }
 }

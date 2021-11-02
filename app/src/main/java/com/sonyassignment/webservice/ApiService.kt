@@ -1,13 +1,12 @@
 package com.sonyassignment.webservice
 
-import retrofit2.Response
+import okhttp3.ResponseBody
 import retrofit2.http.GET
 import retrofit2.http.Streaming
-import retrofit2.http.Url
 
 
 interface ApiService {
     @Streaming
-    @GET
-    suspend fun downloadFile(@Url fileUrl: String): Response<RepoResult<String>>
+    @GET("trpjj0svhw3u2cui/TranslationFile.csv")
+    suspend fun downloadFile(): ResponseBody
 }
