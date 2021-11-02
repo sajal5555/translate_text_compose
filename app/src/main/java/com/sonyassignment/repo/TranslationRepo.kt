@@ -1,7 +1,8 @@
 package com.sonyassignment.repo
 
-import android.os.Environment
 import android.util.Log
+import androidx.compose.runtime.mutableStateOf
+import com.sonyassignment.webservice.FILE_NAME
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.collect
@@ -15,27 +16,26 @@ import java.io.InputStream
 class TranslationRepo(
     private val translationDataSource: TranslationDataSource = getKoin().get(),
 ) {
+    var response = mutableStateOf<String?>(null)
 
-    // file is stored at https://filebin.net/trpjj0svhw3u2cui
-    val fileName = "TranslationFile.csv"
-
-    fun downloadFile() {
+    fun downloadFile(path: String) {
         CoroutineScope(Dispatchers.IO).launch {
             val data = translationDataSource.downloadFile()
             data.collect {
-                saveFile(it, fileName)
+                response.value = saveFile(it, path)
             }
+
         }
     }
 
 
-    private fun saveFile(body: ResponseBody?, fileName: String): String {
+    private fun saveFile(body: ResponseBody?, path: String): String? {
         if (body == null)
             return ""
         var input: InputStream? = null
         try {
             input = body.byteStream()
-            val yourFile = File(Environment.getDataDirectory(), fileName)
+            val yourFile = File(path, FILE_NAME)
             yourFile.createNewFile() // if file already exists will do nothing
 
             val fos = FileOutputStream(yourFile, false)
@@ -50,9 +50,10 @@ class TranslationRepo(
             return yourFile.path
         } catch (e: Exception) {
             Log.e("saveFile", e.toString())
+            return null
         } finally {
             input?.close()
         }
-        return ""
+        return null
     }
 }

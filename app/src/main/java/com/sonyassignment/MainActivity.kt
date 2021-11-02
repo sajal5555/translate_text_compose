@@ -14,7 +14,7 @@ import com.sonyassignment.ui.theme.SonyAssignmentTheme
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if (!checkReadWritePermission()) {
+        if (!hasReadWritePermission()) {
             permReqLauncher.launch(
                 arrayOf(
                     Manifest.permission.READ_EXTERNAL_STORAGE,
@@ -45,14 +45,14 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-    private fun checkReadWritePermission(): Boolean {
+    private fun hasReadWritePermission(): Boolean {
         return ContextCompat.checkSelfPermission(
             applicationContext,
             Manifest.permission.READ_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
                 && ContextCompat.checkSelfPermission(
             applicationContext,
             Manifest.permission.WRITE_EXTERNAL_STORAGE
-        ) != PackageManager.PERMISSION_GRANTED
+        ) == PackageManager.PERMISSION_GRANTED
     }
 }
