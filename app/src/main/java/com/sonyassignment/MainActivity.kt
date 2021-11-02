@@ -1,4 +1,4 @@
-package com.login.sonyassignment
+package com.sonyassignment
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -16,7 +16,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import com.login.sonyassignment.ui.theme.SonyAssignmentTheme
+import com.sonyassignment.ui.theme.SonyAssignmentTheme
 
 class MainActivity : ComponentActivity() {
     @ExperimentalFoundationApi

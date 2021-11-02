@@ -1,4 +1,4 @@
-package com.login.sonyassignment.ui.theme
+package com.sonyassignment.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
