@@ -77,7 +77,7 @@ fun HomeScreen(
                 if (it.languageCode == "en")
                     englishModel.value = it
             }
-
+            selectedCode.value = englishModel.value.languageCode ?: ""
         }
         Box(
             modifier = Modifier
