@@ -33,31 +33,3 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
-@ExperimentalFoundationApi
-@Composable
-fun HomeScreen() {
-    val sizeMapData = arrayOf("English", "Hindi", "Chinease")
-    Scaffold(
-        bottomBar = {
-            Box {
-                val height = 54.dp * ((sizeMapData.size / 3) + 1)
-                val selectedHeight = remember { mutableStateOf(height) }
-                LazyVerticalGrid(
-                    cells = GridCells.Fixed(3),
-                    modifier = Modifier.height(selectedHeight.value)
-                ) {
-                    items(sizeMapData.size) { index ->
-                        Button(modifier = Modifier.wrapContentWidth(), onClick = {}) {
-                            Text(text = sizeMapData[index])
-                        }
-                    }
-                }
-            }
-        },
-    ) {
-        Box(contentAlignment = Alignment.Center) {
-            Text(text = "Hello!")
-        }
-    }
-}
